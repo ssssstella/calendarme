@@ -10,13 +10,13 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 
-export default function DeleteEventTypeRoute({
-  params,
-}: {
-  params: {
-    eventTypeId: string;
-  };
+type Params = Promise<{eventTypeId: string; }>;
+
+export default async function DeleteEventTypeRoute(props: {
+  params: Params
 }) {
+  const params = await props.params;
+
   return (
     <div className="flex flex-1 items-center justify-center">
       <Card className="max-w-[450px] w-full">

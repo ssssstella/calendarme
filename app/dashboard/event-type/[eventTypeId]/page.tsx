@@ -24,11 +24,12 @@ async function getEventTypeData(eventTypeId: string) {
   return eventTypeData;
 }
 
-export default async function EditEventTypeRoute({
-  params,
-}: {
-  params: { eventTypeId: string };
+type Params = Promise<{ eventTypeId: string }>;
+
+export default async function EditEventTypeRoute(props: {
+  params: Params
 }) {
+  const params = await props.params;
   const eventTypeData = await getEventTypeData(params.eventTypeId);
 
   return (
@@ -37,6 +38,7 @@ export default async function EditEventTypeRoute({
       title={eventTypeData.title}
       description={eventTypeData.description}
       duration={eventTypeData.duration}
+      //@ts-ignore
       videoCallProvider={eventTypeData.videoCallSoftware}
       url={eventTypeData.url}
     />

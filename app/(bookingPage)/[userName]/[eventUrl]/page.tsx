@@ -45,16 +45,16 @@ async function getEventTypes(eventUrl: string, userName: string) {
   return data;
 }
 
-export default async function BookingFormRoute({
-  params,
-  searchParams,
-}: {
-  params: {
-    userName: string;
-    eventUrl: string;
-  };
-  searchParams: { date?: string; time?: string };
+type Params = Promise<{ userName: string; eventUrl: string }>;
+type SearchParams = Promise<{ date?: string; time?: string }>;
+
+export default async function BookingFormRoute(props: {
+  params: Params,
+  searchParams: SearchParams,
 }) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+  
   const data = await getEventTypes(params.eventUrl, params.userName);
   const { timezone, gmtOffset } = getTimeZone();
 
@@ -118,7 +118,10 @@ export default async function BookingFormRoute({
             </div>
             <Separator orientation="vertical" className="h-full w-[1px]" />
 
-            <form action={CreateMeetingAction} className="flex flex-col gap-y-4">
+            <form
+              action={CreateMeetingAction}
+              className="flex flex-col gap-y-4"
+            >
               <input type="hidden" name="fromTime" value={searchParams.time} />
               <input type="hidden" name="eventDate" value={searchParams.date} />
               <input type="hidden" name="meetingLength" value={data.duration} />
